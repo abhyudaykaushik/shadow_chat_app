@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:4000", {
+const socket = io("https://chat-server-abhyuday.onrender.com", {
   autoConnect: false
 });
 
@@ -50,7 +50,7 @@ export default function Chat({ user, onLogout, onProfileUpdate }) {
   const handleUpdateGender = async () => {
     if (editableGender === user.gender) { setIsEditingGender(false); return; }
     try {
-      const response = await fetch("http://localhost:4000/auth/edit-gender", {
+      const response = await fetch("https://chat-server-abhyuday.onrender.com/auth/edit-gender", {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ newGender: editableGender, uid: user.google_uid }),
       });
