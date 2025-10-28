@@ -1,0 +1,331 @@
+/* ========================================= */
+/*          GLOBAL & BASIC STYLES            */
+/* ========================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #0D1B2A;
+  color: #E0E0E0;
+  overflow: hidden;
+}
+
+/* ========================================= */
+/*      LOGIN & PROFILE SETUP STYLES         */
+/* ========================================= */
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(180deg, #0D1B2A, #112B44);
+}
+
+.auth-box {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border-radius: 16px;
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.auth-box img {
+  height: 50px;
+  margin: 0 auto 10px;
+  display: block;
+}
+
+.auth-box input,
+.auth-box select {
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #E0E0E0;
+  font-size: 16px;
+  outline: none;
+}
+
+.auth-box input::placeholder {
+  color: #A0A0A0;
+}
+
+.auth-box input:focus,
+.auth-box select:focus {
+  border-color: #4E9AF1;
+}
+
+.auth-box button {
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: none;
+  background: #4E9AF1;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-box button.google {
+  background: #DB4437;
+  margin-top: 10px;
+}
+
+/* ========================================= */
+/*           CHAT CONTAINER & BARS           */
+/* ========================================= */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+  padding-top: 60px; /* Header ke liye space */
+}
+
+.chat-header {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 600px;
+  padding: 15px;
+  text-align: center;
+  background: #112B44;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 5;
+}
+
+.chat-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.online-indicator {
+  position: absolute;
+  top: 20px;
+  right: 120px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+}
+
+.logout-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #F25C54;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  z-index: 10;
+}
+
+/* ========================================= */
+/*            MESSAGES & INPUT               */
+/* ========================================= */
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  margin: 8px 0;
+  padding: 12px 16px;
+  border-radius: 16px;
+  max-width: 80%;
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.message.user {
+  align-self: flex-end;
+  background: #4E9AF1;
+  color: #fff;
+  border-color: #4E9AF1;
+}
+
+.message.other {
+  align-self: flex-start;
+}
+
+.message.system {
+  align-self: center;
+  background: none;
+  border: none;
+  color: #888;
+  font-style: italic;
+}
+
+.input-area {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #E0E0E0;
+  outline: none;
+  font-size: 16px;
+}
+
+.input-area input:focus {
+  border-color: #4E9AF1;
+}
+
+.input-area button {
+  padding: 12px 16px;
+  border-radius: 20px;
+  border: none;
+  background: #4E9AF1;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* ========================================= */
+/*        MATCHING & GENDER SETTINGS         */
+/* ========================================= */
+.match-settings {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: auto; /* Isko neeche rakhega */
+  margin-bottom: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+.setting-row:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.setting-row label {
+  font-weight: 500;
+  color: #aaa;
+}
+
+.setting-row span {
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
+.setting-row select {
+  background: #0D1B2A;
+  color: white;
+  border: 1px solid #4E9AF1;
+  border-radius: 5px;
+  padding: 5px 8px;
+}
+
+.setting-row button {
+  background: none;
+  border: 1px solid #4E9AF1;
+  color: #4E9AF1;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+.setting-row button:hover {
+  background: #4E9AF1;
+  color: white;
+}
+.inline-edit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ========================================= */
+/*              ACTION BUTTONS               */
+/* ========================================= */
+.actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 12px;
+}
+
+.actions button {
+  flex: 1;
+  margin: 4px;
+  padding: 12px;
+  border-radius: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  font-size: 16px;
+}
+
+.actions button.next { background: #4CAF50; color: #fff; }
+.actions button.stop { background: #F25C54; color: #fff; }
+.actions button.new-match { background: #FF9800; color: #fff; }
+.actions button:disabled { background: #555; cursor: not-allowed; }
+
+/* ========================================= */
+/*              MISC & ANIMATIONS            */
+/* ========================================= */
+.green-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #334E6A;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4E9AF1;
+}

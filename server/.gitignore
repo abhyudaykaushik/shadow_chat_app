@@ -1,0 +1,6 @@
+- node_modules
+- .env[1]
+- client folder me .gitignore banayein → paste:
+- node_modules
+- dist
+- .env*[1]
