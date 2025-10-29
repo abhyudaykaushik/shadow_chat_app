@@ -14,7 +14,7 @@ const app = express();
 const server = http.createServer(app);
 
 // ✅ CORS Origin (for frontend)
-const FRONTEND_ORIGIN = process.env.CORS_ORIGIN || "https://your-frontend.netlify.app";
+const FRONTEND_ORIGIN = process.env.CORS_ORIGIN || "https://cool-druid-7257aa.netlify.app";
 
 // ✅ Socket.IO Setup
 const io = new Server(server, {
