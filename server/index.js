@@ -23,7 +23,7 @@ const allowedOrigins = [
 app.use(helmet());
 app.use(express.json());
 
-// ✅ CORS Middleware (Fixed version)
+// ✅ CORS Middleware (Stable version — no wildcard options)
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -39,9 +39,6 @@ app.use(
     credentials: true,
   })
 );
-
-// ✅ Always respond to OPTIONS preflight requests
-app.options("/*", cors());
 
 // ✅ Routes
 app.use("/auth", authRoutes);
