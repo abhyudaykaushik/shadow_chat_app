@@ -20,10 +20,15 @@ const allowedOrigins = [
 ];
 
 // ✅ Security + JSON middleware
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginOpenerPolicy: false, // 👈 important for Google popup to work
+    crossOriginResourcePolicy: false,
+  })
+);
 app.use(express.json());
 
-// ✅ CORS Middleware (Stable version — no wildcard options)
+// ✅ CORS Middleware
 app.use(
   cors({
     origin: (origin, callback) => {
