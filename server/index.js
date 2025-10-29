@@ -41,7 +41,7 @@ app.use(
 );
 
 // ✅ Always respond to OPTIONS preflight requests
-app.options("*", cors());
+app.options("/*", cors());
 
 // ✅ Routes
 app.use("/auth", authRoutes);
