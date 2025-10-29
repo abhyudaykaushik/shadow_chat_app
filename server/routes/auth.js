@@ -4,13 +4,25 @@ import { pool } from "../db.js";
 
 const router = express.Router();
 
-// ✅ Built-in Node.js fetch use kar rahe hain (Node 18+)
+// ✅ Allow cross-origin explicitly for this route (Render + Netlify + Local)
+router.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://cool-druid-7257aa.netlify.app");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+// ✅ Built-in Node.js fetch (Node 18+)
 router.post("/google-login", async (req, res) => {
   try {
     const { token } = req.body;
     if (!token) return res.status(400).json({ error: "Token is required" });
 
-    // ✅ Native fetch call to Google API
+    // ✅ Verify token with Google API
     const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
     const data = await response.json();
 
@@ -20,7 +32,7 @@ router.post("/google-login", async (req, res) => {
 
     const { sub: uid, email, name } = data;
 
-    // ✅ Check if user exists or create new one
+    // ✅ Check or create user
     let userRes = await pool.query("SELECT * FROM users WHERE google_uid = $1", [uid]);
     let user = userRes.rows[0];
 
@@ -32,6 +44,7 @@ router.post("/google-login", async (req, res) => {
       user = newUser.rows[0];
     }
 
+    // ✅ Sign JWT for session
     const jwtToken = jwt.sign({ id: user.id, uid: user.google_uid }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });

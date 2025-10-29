@@ -13,37 +13,58 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-// ✅ CORS Origin (for frontend)
-const FRONTEND_ORIGIN = process.env.CORS_ORIGIN || "https://cool-druid-7257aa.netlify.app";
+// ✅ Allow both local and deployed frontend
+const allowedOrigins = [
+  "http://localhost:5173", // local dev
+  "https://cool-druid-7257aa.netlify.app", // deployed frontend
+];
 
-// ✅ Socket.IO Setup
-const io = new Server(server, {
-  cors: {
-    origin: FRONTEND_ORIGIN,
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
-
-// ✅ Middlewares
+// ✅ Security + JSON middleware
 app.use(helmet());
+app.use(express.json());
+
+// ✅ CORS Middleware (Fixed version)
 app.use(
   cors({
-    origin: FRONTEND_ORIGIN,
-    methods: ["GET", "POST"],
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.log("❌ Blocked CORS origin:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
-app.use(express.json());
+
+// ✅ Always respond to OPTIONS preflight requests
+app.options("*", cors());
 
 // ✅ Routes
 app.use("/auth", authRoutes);
+
+// ✅ Basic test route
+app.get("/", (req, res) => {
+  res.send("✅ ShadowChat Server is running!");
+});
 
 // --- GLOBAL VARIABLES ---
 let onlineUsers = {};
 let socketUserMap = {};
 let waitingUsers = [];
 let activeChats = {};
+
+// ✅ Socket.IO Setup
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 
 // ✅ Helper: Broadcast total online users
 const broadcastOnlineCount = () => {
@@ -103,7 +124,6 @@ const findPartnerFor = async (currentUser) => {
       }
     }
   } else {
-    // No partner available yet → Add to waiting queue
     waitingUsers = waitingUsers.filter((u) => u.userId !== currentUser.userId);
     waitingUsers.push(currentUser);
     console.log("Waiting list updated:", waitingUsers.length);
@@ -114,31 +134,26 @@ const findPartnerFor = async (currentUser) => {
 io.on("connection", (socket) => {
   console.log("✅ New user connected:", socket.id);
 
-  // When user comes online
   socket.on("userOnline", (userId) => {
     onlineUsers[userId] = socket.id;
     socketUserMap[socket.id] = userId;
     broadcastOnlineCount();
   });
 
-  // Match request
   socket.on("findMatch", (userData) => {
     findPartnerFor(userData);
   });
 
-  // Next partner request
   socket.on("requestNextPartner", (userData) => {
     cleanupActiveChat(socket.id);
     findPartnerFor(userData);
   });
 
-  // Stop chat manually
   socket.on("stopChat", () => {
     cleanupActiveChat(socket.id);
     socket.emit("chatEnded");
   });
 
-  // Messaging between matched users
   socket.on("sendMessage", ({ message }) => {
     const receiverSocketId = activeChats[socket.id];
     if (receiverSocketId) {
@@ -146,7 +161,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Disconnect handler
   socket.on("disconnect", () => {
     const disconnectedUserId = socketUserMap[socket.id];
     cleanupActiveChat(socket.id);
@@ -163,7 +177,6 @@ io.on("connection", (socket) => {
     console.log("❌ User disconnected:", socket.id);
   });
 
-  // Socket-level error handling
   socket.on("error", (err) => {
     console.error("Socket error:", err);
   });
