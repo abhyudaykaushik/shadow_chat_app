@@ -13,7 +13,7 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         try {
-          const response = await fetch("http://localhost:4000/auth/google-login", {
+          const response = await fetch("https://shadowchat-server.onrender.com/auth/google-login", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
